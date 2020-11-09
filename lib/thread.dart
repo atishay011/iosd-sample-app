@@ -90,7 +90,7 @@ class _ThreadState extends State<Thread> {
                             child: Heart2(color: Colors.grey[400], size : 25))           
                       ]),
                       Padding(
-                          padding: EdgeInsets.only(top: 8.0, left: 24.0),
+                          padding: EdgeInsets.only(top: 4.0, left: 24.0),
                           child: Row(
                             children: [
                               Text("14d",
@@ -134,7 +134,7 @@ class _ThreadState extends State<Thread> {
                       ]),
                       Padding(
                           padding: EdgeInsets.only(
-                              top: 8.0, left: 24.0, bottom: 8.0),
+                              top: 4.0, left: 24.0, bottom: 8.0),
                           child: Row(
                             children: [
                               Text("14d",

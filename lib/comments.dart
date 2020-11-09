@@ -9,21 +9,119 @@ class Comments extends StatefulWidget {
 
 class _CommentsState extends State<Comments> {
   List _selectIndex = [true, false, false, false];
+    ScrollController _scrollController;
 
+              bool lastStatus = true;
+
+              _scrollListener() {
+                if (isShrink != lastStatus) {
+                  setState(() {
+                    lastStatus = isShrink;
+                  });
+                }
+              }
+
+              bool get isShrink {
+                return _scrollController.hasClients &&
+                    _scrollController.offset > (400 - kToolbarHeight);
+              }
+
+              @override
+              void initState() {
+                _scrollController = ScrollController();
+                _scrollController.addListener(_scrollListener);
+                super.initState();
+              }
+
+              @override
+              void dispose() {
+                _scrollController.removeListener(_scrollListener);
+                super.dispose();
+              }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: Column(
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            Stack(
-              alignment: Alignment.center,
-              children: [
-                Hero(
-                    child: Image.asset("assets/images/custom - 2.jpg"),
-                    tag: "img"),
-                Center(
+      body: 
+          //  Stack(
+           //   alignment: Alignment.center,
+            //  children: [
+              CustomScrollView(
+   controller: _scrollController,
+    slivers : <Widget>[
+      SliverAppBar(
+        iconTheme: IconThemeData(
+    color: isShrink? Colors.black:Colors.white, //change your color here
+  ),
+                backgroundColor: Colors.white,
+                pinned: true,
+                expandedHeight: 400.0,
+                 flexibleSpace: FlexibleSpaceBar(
+             title :  
+             !isShrink ?
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  
+                  Flexible(
+                    flex: 6,
+                    child: Container(),
+                  ),
+
+                  Flexible(
+                    flex: 1,
+                    child:
+                        Text("Do you Overthink?", 
+                        style: Theme.of(context).textTheme.headline5.copyWith(
+                          fontFamily: "Gilroy",
+                          fontSize: 20.0,
+                          color: isShrink ? Colors.black : Colors.white,
+                          fontWeight: FontWeight.w500),
+                        textAlign: TextAlign.center),
+                  ),
+                   Flexible(
+                    flex: 1,
+                    child: 
+                    Text("Share your views/", 
+                        style: Theme.of(context).textTheme.headline5.copyWith(
+                          fontFamily: "Gilroy",
+                          fontSize: 20.0,
+                          color: isShrink ? Colors.black : Colors.white,
+                          fontWeight: FontWeight.w500),
+                        textAlign: TextAlign.center,        
+                        )
+                  ),
+                  Flexible(
+                    flex: 1,
+                    child: 
+                    Text("expieriences", 
+                        style: Theme.of(context).textTheme.headline5.copyWith(
+                          fontFamily: "Gilroy",
+                          fontSize: 20.0,
+                          color: isShrink ? Colors.black : Colors.white,
+                          fontWeight: FontWeight.w500),
+                        textAlign: TextAlign.center,        
+                        )
+                  ),
+                  
+                
+                
+                
+                  Flexible(
+                    flex: 1,
+                    child: Container(),
+                  )
+                ],
+              ):
+              Text("Do you Overthink?...",
+              style : TextStyle(color: Colors.black)
+              ),
+          background:    Image.asset("assets/images/custom - 2.jpg" ,  fit : BoxFit.cover) ,),
+           
+          
+         /*   Stack( 
+            alignment : Alignment.center,
+            children : [
+             Center(
                     child: Column(children: [
                   Text("Do you Overthink?",
                       style: Theme.of(context).textTheme.headline5.copyWith(
@@ -58,9 +156,27 @@ class _CommentsState extends State<Comments> {
                           color: Colors.white),
                       onPressed: () {}),
                 ),
-                Positioned(bottom: 40, child: Heart(color: Colors.white))
-              ],
-            ),
+                Positioned(bottom: 40, child: Heart(color: Colors.white)),
+     ], 
+     ),*/
+     centerTitle: true,
+     actions: [
+         IconButton(
+                      icon: Icon(Icons.notifications_outlined,
+                          color: !isShrink? Colors.white : Colors.black),
+                      onPressed: () {}),
+                
+     ],
+      ),
+      
+      
+   
+              
+            //  ],
+          //  ),
+        SliverFillRemaining(   
+         child : Column(
+           children : [ 
             Padding(
               padding: EdgeInsets.all(16),
               child: Row(
@@ -171,21 +287,24 @@ class _CommentsState extends State<Comments> {
                 shrinkWrap: true,
                 children: [
                 Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
                   children : [
                   Stack(children: [
                     Container(
                         padding: EdgeInsets.only(
                             top: 32, left: 16, right: 16, bottom: 10),
-                        margin: EdgeInsets.symmetric(
-                          vertical: 12,
-                          horizontal: 16,
+                        margin: EdgeInsets.only(
+                          top: 12,
+                          bottom : 0,
+                          left: 32,
+                          right : 32,
                         ),
                         color: Color(0xffEEEEEE),
                         child: Text(
                             "If I could make money by overthinking, I'd suppress Bill Gates by now. Overthinking is such a painful feeling. Your mind keeps you sending multitude of alternate scenarios and you keep playing. If I could make money by overthinking, I'd suppress Bill Gates by now. Overthinking is such a painful feeling. Your mind keeps you sending multitude of alternate scenarios and you keep playing.If I could make money by overthinking, I'd suppress Bill Gates by now. Overthinking is such a painful feeling. Your mind keeps you sending multitude of alternate scenarios and you keep playing",
                             style: TextStyle())),
                     Positioned(
-                        left: 10.0,
+                        left: 2.0,
                         top: 10.0,
                         child: CircleAvatar(
                             radius: 15.0,
@@ -193,13 +312,14 @@ class _CommentsState extends State<Comments> {
                             child: Icon(Icons.account_circle,
                                 color: Colors.white))),
                                  Positioned(
-                            right: 0.0,
-                            bottom: -5.0,
-                            child: Heart2(color: Colors.grey[400], size : 25))  
+                            right: 15.0,
+                            bottom: -15.0,
+                          child :  Heart2(color: Colors.grey[400], size : 25))
+                                
                   ]),
                     Padding(
                           padding: EdgeInsets.only(
-                              top: 8.0, left: 24.0, bottom: 8.0 , right : 24),
+                              top: 0.0, left: 48.0, bottom: 8.0 , right : 24),
                           child: Row(
                             children: [
                               Text("14d",
@@ -211,32 +331,90 @@ class _CommentsState extends State<Comments> {
                                           fontSize: 12.0)),
                               SizedBox(width: 8.0),
                               Icon(Icons.reply),
-                                 Spacer(),
-                               GestureDetector(
+                            ],
+                          ), 
+                    ),
+                     Padding(
+              padding: EdgeInsets.fromLTRB(64.0 , 8.0 , 8.0 , 8.0),
+                  child :  GestureDetector(
             onTap: (){Navigator.pushNamed(context, '/thread' ,);},
             child: Text("View all replies",
              style : Theme.of(context).textTheme.bodyText1.copyWith( color : Colors.pink ,)             
             ),
-            )
-                            ],
-                          ))
+            ),
+                  
+                    )
+                  ]
+                  ),
+                     Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+                  children : [
+                  Stack(children: [
+                    Container(
+                        padding: EdgeInsets.only(
+                            top: 32, left: 16, right: 16, bottom: 10),
+                        margin: EdgeInsets.only(
+                          top: 12,
+                          bottom : 0,
+                          left: 64,
+                          right : 16,
+                        ),
+                        color: Color(0xffEEEEEE),
+                        child: Text(
+                            "If I could make money by overthinking, I'd suppress Bill Gates by now. Overthinking is such a painful feeling. Your mind keeps you sending multitude of alternate scenarios and you keep playing. If I could make money by overthinking, I'd suppress Bill Gates by now. Overthinking is such a painful feeling. Your mind keeps you sending multitude of alternate scenarios and you keep playing.If I could make money by overthinking, I'd suppress Bill Gates by now. Overthinking is such a painful feeling. Your mind keeps you sending multitude of alternate scenarios and you keep playing",
+                            style: TextStyle())),
+                    Positioned(
+                        left: 30.0,
+                        top: 10.0,
+                        child: CircleAvatar(
+                            radius: 15.0,
+                            backgroundColor: Colors.amberAccent,
+                            child: Icon(Icons.account_circle,
+                                color: Colors.white))),
+                                 Positioned(
+                            right: 0.0,
+                            bottom: -15.0,
+                            child: Heart2(color: Colors.grey[400], size : 25))  
                   ]),
+                    Padding(
+                          padding: EdgeInsets.only(
+                              top: 0.0, left: 80.0, bottom: 8.0 , right : 24),
+                          child: Row(
+                            children: [
+                              Text("14d",
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .button
+                                      .copyWith(
+                                          color: Colors.grey[600],
+                                          fontSize: 12.0)),
+                              SizedBox(width: 8.0),
+                              Icon(Icons.reply),
+                            ],
+                          ), 
+                    ),      
+                  ],
+                  ),
+                           
                   Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children : [
                   Stack(children: [
                     Container(
                         padding: EdgeInsets.only(
                             top: 32, left: 16, right: 16, bottom: 10),
-                        margin: EdgeInsets.symmetric(
-                          vertical: 12,
-                          horizontal: 16,
+                        margin: EdgeInsets.only(
+                          top: 12,
+                          bottom : 0,
+                          left: 32,
+                          right : 32,
                         ),
                         color: Color(0xffEEEEEE),
                         child: Text(
                             "If I could make money by overthinking, I'd suppress Bill Gates by now. Overthinking is such a painful feeling. Your mind keeps you sending multitude of alternate scenarios and you keep playing. If I could make money by overthinking, I'd suppress Bill Gates by now. Overthinking is such a painful feeling. Your mind keeps you sending multitude of alternate scenarios and you keep playing.If I could make money by overthinking, I'd suppress Bill Gates by now. Overthinking is such a painful feeling. Your mind keeps you sending multitude of alternate scenarios and you keep playing",
                             style: TextStyle())),
                     Positioned(
-                        left: 10.0,
+                        left: 2.0,
                         top: 10.0,
                         child: CircleAvatar(
                             radius: 15.0,
@@ -244,13 +422,13 @@ class _CommentsState extends State<Comments> {
                             child: Icon(Icons.account_circle,
                                 color: Colors.white))),
                                  Positioned(
-                            right: 0.0,
-                            bottom: -5.0,
+                            right: 15.0,
+                            bottom: -15.0,
                             child: Heart2(color: Colors.grey[400], size : 25))  
                   ]),
                     Padding(
                           padding: EdgeInsets.only(
-                              top: 8.0, left: 24.0, bottom: 8.0 , right : 24.0),
+                              top: 0.0, left: 48.0, bottom: 8.0 , right : 24.0),
                           child: Row(
                             children: [
                               Text("14d",
@@ -262,22 +440,72 @@ class _CommentsState extends State<Comments> {
                                           fontSize: 12.0)),
                               SizedBox(width: 8.0),
                               Icon(Icons.reply),
-                              Spacer(),
-                               GestureDetector(
+                           
+                            ],
+                          ),
+                          
+                          ),
+                             Padding(
+              padding: EdgeInsets.fromLTRB(64.0 , 8.0 , 8.0 , 8.0),
+                  child :  GestureDetector(
             onTap: (){Navigator.pushNamed(context, '/thread' ,);},
             child: Text("View all replies",
              style : Theme.of(context).textTheme.bodyText1.copyWith( color : Colors.pink ,)             
             ),
-            )
+            ),             
+                    )
+                ],              
+                  ),
+                   Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+                  children : [
+                  Stack(children: [
+                    Container(
+                        padding: EdgeInsets.only(
+                            top: 32, left: 16, right: 16, bottom: 10),
+                        margin: EdgeInsets.only(
+                          top: 12,
+                          bottom : 0,
+                          left: 64,
+                          right : 16,
+                        ),
+                        color: Color(0xffEEEEEE),
+                        child: Text(
+                            "If I could make money by overthinking, I'd suppress Bill Gates by now. Overthinking is such a painful feeling. Your mind keeps you sending multitude of alternate scenarios and you keep playing. If I could make money by overthinking, I'd suppress Bill Gates by now. Overthinking is such a painful feeling. Your mind keeps you sending multitude of alternate scenarios and you keep playing.If I could make money by overthinking, I'd suppress Bill Gates by now. Overthinking is such a painful feeling. Your mind keeps you sending multitude of alternate scenarios and you keep playing",
+                            style: TextStyle())),
+                    Positioned(
+                        left: 30.0,
+                        top: 10.0,
+                        child: CircleAvatar(
+                            radius: 15.0,
+                            backgroundColor: Colors.amberAccent,
+                            child: Icon(Icons.account_circle,
+                                color: Colors.white))),
+                                 Positioned(
+                            right: 0.0,
+                            bottom: -15.0,
+                            child: Heart2(color: Colors.grey[400], size : 25))  
+                  ]),
+                    Padding(
+                          padding: EdgeInsets.only(
+                              top: 0.0, left: 80.0, bottom: 8.0 , right : 24),
+                          child: Row(
+                            children: [
+                              Text("14d",
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .button
+                                      .copyWith(
+                                          color: Colors.grey[600],
+                                          fontSize: 12.0)),
+                              SizedBox(width: 8.0),
+                              Icon(Icons.reply),
                             ],
-                          ),
-                          
-                          )
-                ]
-                  )
-                ],
-              
-                
+                          ), 
+                    ),      
+                  ],
+                  ),
+                ],  
               )
             ),
             Container(
@@ -314,9 +542,13 @@ class _CommentsState extends State<Comments> {
                 ],
               ),
             ),
-          ],
-        ),
-      ),
-    );
+          
+         
+          ]
+        )
+        )
+    ]
+              )
+      );
   }
 }
