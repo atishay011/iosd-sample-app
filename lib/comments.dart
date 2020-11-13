@@ -1,7 +1,8 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:iosd/thread.dart';
-import 'package:iosd/widgets/heart2.dart';
+//import 'package:iosd/thread.dart';
+import 'package:iosd/widgets/commentListt.dart';
+//import 'package:iosd/widgets/heart2.dart';
 import 'package:http/http.dart' as http;
 
 class Comments extends StatefulWidget {
@@ -66,19 +67,12 @@ class _CommentsState extends State<Comments> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-        future: userFuture,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Scaffold(
-                body: Center(
-              child: CircularProgressIndicator(),
-            ));
-          }
-          return Scaffold(
+    return
+    Scaffold(
               body: CustomScrollView(controller: _scrollController, slivers: <
                   Widget>[
             SliverAppBar(
+              automaticallyImplyLeading : false,
               iconTheme: IconThemeData(
                 color: isShrink
                     ? Colors.black
@@ -270,7 +264,7 @@ class _CommentsState extends State<Comments> {
                 color: Colors.black,
                 thickness: 0.2,
               ),
-              Expanded(
+             /* Expanded(
                   child: ListView.builder(
                       shrinkWrap: true,
                       itemCount: snapshot.data.length,
@@ -460,7 +454,8 @@ class _CommentsState extends State<Comments> {
                                     ],
                                   )
                                 : Container(height: 0),
-                          ]))),
+                          ]))),*/
+              CommentList(),
               Container(
                 decoration: BoxDecoration(
                     color: Colors.white,
@@ -470,8 +465,12 @@ class _CommentsState extends State<Comments> {
                 child: Row(
                   children: [
                     Expanded(
-                      child: TextField(
-                       
+                      child: TextFormField(
+                       onTap: (){
+                      //  setState(() {
+                        //                        _scrollController.removeListener(_scrollListener);  
+                       // }); 
+                       },
                         controller : _controller,
                         style: TextStyle(color: Colors.black),
                         decoration: InputDecoration(
@@ -485,7 +484,10 @@ class _CommentsState extends State<Comments> {
                         ),
                         onChanged: (value) {
                           setState(() {
+                      
                        messageText = value;
+              _scrollController.animateTo(324, duration: Duration(milliseconds: 100), curve: Curves.linear);
+
                           });
                         },
                       ),
@@ -499,7 +501,9 @@ class _CommentsState extends State<Comments> {
                       onPressed: messageText == "" ? null :() async {   
                         addComment(messageText).then((value) {
                           setState(() {
-                            userFuture = fetchComments();
+                          _controller.text = "";
+                   FocusScope.of(context).unfocus();
+                        
                           });
                         });
                       }
@@ -509,6 +513,8 @@ class _CommentsState extends State<Comments> {
               ),
             ]))
           ]));
-        });
+        }
+     
+        
   }
-}
+
